@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
+import static Model.GameStatusE.*;
 
 public class SudokuBoard {
 
@@ -22,17 +24,16 @@ public class SudokuBoard {
         if (board.stream()
                 .flatMap(Collection::stream)
                 .noneMatch(s -> !s.isFixed() && nonNull(s.getContent()))){
-            return GameStatusE.NON_STARTED;
-        } else if (board.stream()
+            return NON_STARTED;
+        }
+
+        return board.stream()
                 .flatMap(Collection::stream)
-                .allMatch(s-> !s.isFixed() && nonNull(s.getContent()))){
-            return GameStatusE.COMPLETE;
-        } else
-            return GameStatusE.INCOMPLETE;
+                .anyMatch(square -> isNull(square.getContent())) ? INCOMPLETE : COMPLETE;
     }
 
     public boolean hasErrors() {
-        if (getStatus() == GameStatusE.NON_STARTED) return false;
+        if (getStatus() == NON_STARTED) return false;
 
         return board.stream()
                 .flatMap(Collection::stream)
@@ -56,9 +57,13 @@ public class SudokuBoard {
     }
 
     public void reset() {
-        board.stream()
-                .flatMap(Collection::stream)
-                .filter(square -> !square.isFixed())
-                .forEach(Square::clearSquare);
+        board.forEach(row -> row.forEach(Square::clearSquare)); //clear square utiliza setContent que verifica se o
+        // espaço é fixo ou não então não é necessário utilizar o filter.
     }
+
+    public boolean gameIsFinished() {
+        return !hasErrors() && getStatus().equals(COMPLETE);
+    }
+
+
 }

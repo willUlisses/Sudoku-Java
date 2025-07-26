@@ -22,13 +22,13 @@ public class Square {
         return content;
     }
 
-    public void clearSquare() {
-        setContent(null);
-    }
-
     public void setContent(Integer content) {
         if (fixed) return;
         this.content = content;
+    }
+
+    public void clearSquare() {
+        setContent(null);
     }
 
     public boolean isFixed() {
