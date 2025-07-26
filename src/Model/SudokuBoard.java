@@ -30,4 +30,35 @@ public class SudokuBoard {
         } else
             return GameStatusE.INCOMPLETE;
     }
+
+    public boolean hasErrors() {
+        if (getStatus() == GameStatusE.NON_STARTED) return false;
+
+        return board.stream()
+                .flatMap(Collection::stream)
+                .anyMatch(square -> nonNull(square.getContent()) && !square.getContent().equals(square.getExpectedContent()));
+    }
+
+    public boolean clearValue(final int row, final int col) {
+        Square square = board.get(row).get(col);
+        if (square.isFixed()) return false;
+
+        square.clearSquare();
+        return true;
+    }
+
+    public boolean changeValue(final int row, final int col, final int value){
+        Square squareChanging = board.get(row).get(col);
+        if (squareChanging.isFixed()) return false;
+
+        squareChanging.setContent(value);
+        return true;
+    }
+
+    public void reset() {
+        board.stream()
+                .flatMap(Collection::stream)
+                .filter(square -> !square.isFixed())
+                .forEach(Square::clearSquare);
+    }
 }
