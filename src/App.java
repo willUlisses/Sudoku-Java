@@ -66,4 +66,45 @@ public class App {
         board = new SudokuBoard(squares);
         System.out.println("O jogo foi iniciado com sucesso!");
     }
+
+    public void inputNumber() {
+        if (Objects.isNull(board)) {
+            System.out.println("O jogo ainda não foi iniciado!");
+            return;
+        }
+
+        System.out.println("Informe a linha da posição que você quer modificar");
+        int row = runUntilValueIsValid(0,8);
+        System.out.println("Agora informe a coluna dessa posição:");
+        int col = runUntilValueIsValid(0,8);
+        System.out.println("Finalmente, informe o valor que será inserido:");
+        int value = runUntilValueIsValid(1,9);
+        if (!board.changeValue(row,col,value)){
+            System.out.printf("A posição (%s,%s) tem um valor fixo\n", row, col);
+        }
+    }
+
+    public void removeNumber() {
+        if (Objects.isNull(board)){
+            System.out.println("O jogo ainda não foi iniciado.");
+            return;
+        }
+
+        System.out.println("Informe a linha da posição que você quer remover");
+        int row = runUntilValueIsValid(0,8);
+        System.out.println("Agora informe a coluna dessa posição:");
+        int col = runUntilValueIsValid(0,8);
+        if (!board.clearValue(row,col)){
+            System.out.printf("A posição (%s,%s) tem um valor fixo\n", row, col);
+        }
+    }
+
+    private int runUntilValueIsValid(final int MIN, final int MAX) {
+        int value = scanner.nextInt();
+        while (value < MIN || value > MAX) {
+            System.out.printf("informe um número entre %s e %s\n", MIN, MAX);
+            value = scanner.nextInt();
+        }
+        return value;
+    }
 }
