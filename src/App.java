@@ -42,7 +42,10 @@ public class App {
             case 5 -> showGameStatus();
             case 6 -> clearGame();
             case 7 -> finishGame();
-            case 8 -> System.exit(0);
+            case 8 -> {
+                System.exit(0);
+                scanner.close();
+            }
             default -> System.out.println("Opção inválida, tente novamente uma das opções listadas no menu");
         }
     }
@@ -60,12 +63,12 @@ public class App {
             for (int j = 0; j < BOARD_LIMIT; j++){
                  String squareConfig = positions.get("%s, %s".formatted(i,j));
                  if (Objects.nonNull(squareConfig)){
-                     int expectedContent = Integer.parseInt(squareConfig.split(",")[0]);
-                     boolean squareStatus = Boolean.parseBoolean(squareConfig.split(",")[1]);
+                     Integer expectedContent = Integer.parseInt(squareConfig.split(",")[0]);
+                     Boolean squareStatus = Boolean.parseBoolean(squareConfig.split(",")[1]);
                      Square square = new Square(expectedContent, squareStatus);
                      squares.get(i).add(square);
                  } else {
-                     squares.get(i).add(new Square(6, true));
+                     squares.get(i).add(new Square(7, true));
                  }
 
             }
@@ -122,7 +125,7 @@ public class App {
             }
         }
         System.out.println("A situação atual do jogo é a seguinte:");
-        System.out.printf((BOARD_TEMPLATE), args);
+        System.out.printf((BOARD_TEMPLATE) + "\n", args);
     }
 
     public static void showGameStatus() {
