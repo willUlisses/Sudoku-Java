@@ -1,7 +1,5 @@
 import Model.Square;
 import Model.SudokuBoard;
-import Util.BoardTemplate;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,17 +34,17 @@ public class App {
         System.out.println("8 - Sair");
 
         option = scanner.nextInt();
-        /*switch (option) {
+        switch (option) {
             case 1 -> startGame(positions);
-            case 2 ->
-            case 3 ->
-            case 4 ->
-            case 5 ->
-            case 6 ->
-            case 7 ->
-            case 8 ->
+            case 2 -> inputNumber();
+            case 3 -> removeNumber();
+            case 4 -> showGame();
+            case 5 -> showGameStatus();
+            case 6 -> clearGame();
+            case 7 -> finishGame();
+            case 8 -> System.exit(0);
             default -> System.out.println("Opção inválida, tente novamente uma das opções listadas no menu");
-        }*/
+        }
     }
     }
 
@@ -57,21 +55,26 @@ public class App {
         }
 
         List<List<Square>> squares = new ArrayList<>();
-        for (int i = 0; i < BOARD_LIMIT; i ++) {
+        for (int i = 0; i < BOARD_LIMIT; i++) {
             squares.add(new ArrayList<>());
             for (int j = 0; j < BOARD_LIMIT; j++){
                  String squareConfig = positions.get("%s, %s".formatted(i,j));
-                 Integer expectedContent = Integer.parseInt(squareConfig.split(",")[0]);
-                 boolean squareStatus = Boolean.parseBoolean(squareConfig.split(",")[1]);
-                 Square square = new Square(expectedContent, squareStatus);
-                 squares.get(i).add(square);
+                 if (Objects.nonNull(squareConfig)){
+                     int expectedContent = Integer.parseInt(squareConfig.split(",")[0]);
+                     boolean squareStatus = Boolean.parseBoolean(squareConfig.split(",")[1]);
+                     Square square = new Square(expectedContent, squareStatus);
+                     squares.get(i).add(square);
+                 } else {
+                     squares.get(i).add(new Square(6, true));
+                 }
+
             }
         }
         board = new SudokuBoard(squares);
         System.out.println("O jogo foi iniciado com sucesso!");
     }
 
-    public void inputNumber() {
+    public static void inputNumber() {
         if (Objects.isNull(board)) {
             System.out.println("O jogo ainda não foi iniciado!");
             return;
@@ -114,12 +117,12 @@ public class App {
         for (int i = 0; i < BOARD_LIMIT; i++) { //itera sobre a linha
             for (int j = 0; j < BOARD_LIMIT; j++) { //avança sobre cada coluna
                 Square currentSquare = board.getBoard().get(i).get(j); //vai pegar cada quadrado da linha i
-                args[argPos++] = " " + (Objects.isNull(currentSquare.getContent()) ? "[ ]" : currentSquare.getContent());
+                args[argPos++] = " " + (Objects.isNull(currentSquare.getContent()) ? " " : currentSquare.getContent());
                 // a linha acima vai exibir o quadrado com o seu valor se ele não for nulo
             }
         }
         System.out.println("A situação atual do jogo é a seguinte:");
-        System.out.printf((BOARD_TEMPLATE) + "\n", args);
+        System.out.printf((BOARD_TEMPLATE), args);
     }
 
     public static void showGameStatus() {
