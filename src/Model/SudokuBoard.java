@@ -15,7 +15,7 @@ public class SudokuBoard {
         this.board = board;
     }
 
-    public List<List<Square>> showCurrentGame() {
+    public List<List<Square>> getBoard() {
         return board;
     }
 
@@ -28,7 +28,7 @@ public class SudokuBoard {
 
         return board.stream()
                 .flatMap(Collection::stream)
-                .anyMatch(square -> isNull(square.getContent())) ? INCOMPLETE : COMPLETE;
+                .anyMatch(square -> !square.isFixed() && isNull(square.getContent())) ? INCOMPLETE : COMPLETE;
     }
 
     public boolean hasErrors() {

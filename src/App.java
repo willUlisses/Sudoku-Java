@@ -1,9 +1,13 @@
 import Model.Square;
 import Model.SudokuBoard;
+import Util.BoardTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static Util.BoardTemplate.BOARD_TEMPLATE;
+
 
 public class App {
 
@@ -84,7 +88,7 @@ public class App {
         }
     }
 
-    public void removeNumber() {
+    public static void removeNumber() {
         if (Objects.isNull(board)){
             System.out.println("O jogo ainda não foi iniciado.");
             return;
@@ -99,7 +103,75 @@ public class App {
         }
     }
 
-    private int runUntilValueIsValid(final int MIN, final int MAX) {
+    private static void showGame(){
+        if (Objects.isNull(board)){
+            System.out.println("O jogo ainda não foi iniciado.");
+            return;
+        }
+
+        Object[] args = new Object[81]; //existem 81 posições a serem exibidas, pois é um board de 9 x 9
+        int argPos = 0;
+        for (int i = 0; i < BOARD_LIMIT; i++) { //itera sobre a linha
+            for (int j = 0; j < BOARD_LIMIT; j++) { //avança sobre cada coluna
+                Square currentSquare = board.getBoard().get(i).get(j); //vai pegar cada quadrado da linha i
+                args[argPos++] = " " + (Objects.isNull(currentSquare.getContent()) ? "[ ]" : currentSquare.getContent());
+                // a linha acima vai exibir o quadrado com o seu valor se ele não for nulo
+            }
+        }
+        System.out.println("A situação atual do jogo é a seguinte:");
+        System.out.printf((BOARD_TEMPLATE) + "\n", args);
+    }
+
+    public static void showGameStatus() {
+        if (Objects.isNull(board)){
+            System.out.println("O jogo ainda não foi iniciado.");
+            return;
+        }
+
+        System.out.println("Atualmente o jogo se encontra como: " + board.getStatus().getLabel());
+        if (board.hasErrors()) {
+            System.out.println("O seu jogo contém erros:");
+        } else {
+            System.out.println("Atualmente o jogo não contém erros");
+        }
+    }
+
+    public static void clearGame(){
+        if (Objects.isNull(board)){
+            System.out.println("O jogo ainda não foi iniciado.");
+            return;
+        }
+
+        System.out.println("Você tem certeza que deseja que o jogo seja limpo e o progresso seja perdido? (digite 'y' ou 'n')");
+        String choice = scanner.next();
+        while (!choice.equalsIgnoreCase("y") || !choice.equalsIgnoreCase("n")){
+            System.out.println("Informe 'y' ou 'n' para confirmar ou recusar respectivamente");
+            choice = scanner.next();
+        }
+
+        if (choice.equalsIgnoreCase("y")){
+            board.reset();
+        }
+    }
+
+    public static void finishGame() {
+        if (Objects.isNull(board)){
+            System.out.println("O jogo ainda não foi iniciado.");
+            return;
+        }
+
+        if (board.gameIsFinished()) {
+            System.out.println("O board não contém nenhum erro e seu jogo foi finalizado com sucesso!!");
+            showGame();
+            board = null;
+        } else if (board.hasErrors()) {
+            System.out.println("Seu jogo contém erros, verifique seu board.");
+        } else {
+            System.out.println("Você esqueceu algum espaço, verifique seu board");
+        }
+    }
+
+    private static int runUntilValueIsValid(final int MIN, final int MAX) {
         int value = scanner.nextInt();
         while (value < MIN || value > MAX) {
             System.out.printf("informe um número entre %s e %s\n", MIN, MAX);
