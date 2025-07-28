@@ -61,16 +61,11 @@ public class App {
         for (int i = 0; i < BOARD_LIMIT; i++) {
             squares.add(new ArrayList<>());
             for (int j = 0; j < BOARD_LIMIT; j++){
-                 String squareConfig = positions.get("%s, %s".formatted(i,j));
-                 if (Objects.nonNull(squareConfig)){
-                     Integer expectedContent = Integer.parseInt(squareConfig.split(",")[0]);
-                     Boolean squareStatus = Boolean.parseBoolean(squareConfig.split(",")[1]);
-                     Square square = new Square(expectedContent, squareStatus);
-                     squares.get(i).add(square);
-                 } else {
-                     squares.get(i).add(new Square(7, true));
-                 }
-
+                String squareConfig = positions.get("%s,%s".formatted(i,j));
+                Integer expectedContent = Integer.parseInt(squareConfig.split(",")[0]);
+                Boolean squareStatus = Boolean.parseBoolean(squareConfig.split(",")[1]);
+                Square square = new Square(expectedContent, squareStatus);
+                squares.get(i).add(square);
             }
         }
         board = new SudokuBoard(squares);
