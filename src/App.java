@@ -142,10 +142,10 @@ public class App {
             System.out.println("O jogo ainda não foi iniciado.");
             return;
         }
-
         System.out.println("Você tem certeza que deseja que o jogo seja limpo e o progresso seja perdido? (digite 'y' ou 'n')");
-        String choice = scanner.next();
-        while (!choice.equalsIgnoreCase("y") || !choice.equalsIgnoreCase("n")){
+
+        String choice = scanner.nextLine();
+        while (!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n")){
             System.out.println("Informe 'y' ou 'n' para confirmar ou recusar respectivamente");
             choice = scanner.next();
         }
