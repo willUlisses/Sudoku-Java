@@ -1,16 +1,19 @@
-import UserInterface.frame.MainFrame;
-import UserInterface.panel.MainPanel;
+import UserInterface.screen.MainScreen;
 
-import javax.swing.*;
-import java.awt.*;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UImain {
     public static void main(String[] args) {
+        Map<String,String> gamePositions = Stream.of(args)
+                .collect(Collectors.toMap(
+                        k -> k.split(";")[0],// pega a posição i e j
+                        v -> v.split(";")[1] // pega o valor e se é fixo
+                ));
 
-        Dimension dimension = new Dimension(600,600);
-        JPanel mainPanel = new MainPanel(dimension);
-        JFrame mainFrame = new MainFrame(dimension, mainPanel);
-        mainFrame.revalidate();
-        mainFrame.repaint();
+        MainScreen mainScreen = new MainScreen(gamePositions);
+        mainScreen.buildMainScreen();
+
     }
 }
