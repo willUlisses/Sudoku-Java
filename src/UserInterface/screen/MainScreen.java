@@ -3,6 +3,8 @@ package UserInterface.screen;
 import Model.GameStatusE;
 import Model.Square;
 import Service.BoardService;
+import Service.EventE;
+import Service.NotifierService;
 import UserInterface.button.CheckGameStatusButton;
 import UserInterface.button.FinishGameButton;
 import UserInterface.button.ResetGameButton;
@@ -20,7 +22,9 @@ import java.util.Map;
 public class MainScreen {
 
     private final static Dimension DIMENSION = new Dimension(600,600);
+
     private final BoardService boardService;
+    private final NotifierService notifierService;
 
     private JButton finishGameButton;
     private JButton checkGameButton;
@@ -28,6 +32,7 @@ public class MainScreen {
 
     public MainScreen(final Map<String, String> gamePositions) {
         this.boardService = new BoardService(gamePositions);
+        this.notifierService = new NotifierService();
     }
 
     public void buildMainScreen() {
@@ -62,6 +67,7 @@ public class MainScreen {
 
     private JPanel generateSudokuSector(final List<Square> squaresOfSudokuSector) {
         List<NumberText> numberTextFields = new ArrayList<>(squaresOfSudokuSector.stream().map(NumberText::new).toList());
+        numberTextFields.forEach(textField -> notifierService.subscribe(EventE.CLEAR_SPACE, textField));
         return new SudokuPanel(numberTextFields);
     }
 
@@ -91,6 +97,7 @@ public class MainScreen {
                 case COMPLETE -> "O jogo está finalizado";
             };
             message += hasErrors ? " e contém erros" : " e não contém erros";
+            JOptionPane.showMessageDialog(null, message);
         });
         mainPanel.add(checkGameButton);
     }
@@ -106,8 +113,9 @@ public class MainScreen {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE
             );
-            if (dialogResult == 0) {
+            if (dialogResult == JOptionPane.YES_OPTION) {
                 boardService.reset();
+                notifierService.notify(EventE.CLEAR_SPACE);
             }
         });
         mainPanel.add(resetGameButton);

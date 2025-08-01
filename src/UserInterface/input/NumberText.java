@@ -1,13 +1,15 @@
 package UserInterface.input;
 
 import Model.Square;
+import Service.EventE;
+import Service.EventListener;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class NumberText extends JTextField {
+public class NumberText extends JTextField implements EventListener {
 
     private final Square square;
 
@@ -49,5 +51,11 @@ public class NumberText extends JTextField {
                 changeSquareContent();
             }
         });
+    }
+    @Override
+    public void update(final EventE event) {
+        if (event.equals(EventE.CLEAR_SPACE) && this.isEnabled()) {
+            this.setText("");
+        }
     }
 }
