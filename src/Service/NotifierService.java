@@ -19,6 +19,4 @@ public class NotifierService {
     public void notify(final EventE event) {
         listeners.get(event).forEach(listener -> listener.update(event));
     }
-
-
 }
