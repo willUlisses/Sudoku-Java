@@ -13,7 +13,7 @@ import UserInterface.input.NumberText;
 import UserInterface.panel.MainPanel;
 import UserInterface.panel.SudokuPanel;
 
-import javax.swixng.*;
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
